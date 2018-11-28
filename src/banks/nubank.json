@@ -1,0 +1,22 @@
+{
+  "title": "Nubank",
+  "intro": "Nubank é uma empresa startup brasileira pioneira no segmento de serviços financeiros, atuando como operadora de cartões de crédito e banco digital com operações no Brasil, sediada em São Paulo e fundada em 6 de maio de 2013 por David Vélez. ",
+  "reputation" : "Tem como investidores Sequoia Capital, Kaszek Ventures, Tiger Global Management, Founders Fund, Goldman Sachs, QED Investors e DST Global. Recebeu em seus dois primeiros anos de existência o aporte de 600 milhões de reais. É umas das primeiras empresas brasileiras a trabalhar com os cards do Google Now, no qual é apresentada a informação de fatura fechada",
+  "website": "https://www.nubank.com.br",
+  "accounts": [
+    {
+      "title": "NuConta",
+      "features": {
+        "creditCard": "Sim",
+        "monthlyPayment": "R$0,00",
+        "transfer": "R$0,00",
+        "withdraw" : "Não",
+        "credit": "Não",
+        "rewards" : "R$19,00 mês",
+        "barcodePayments": "Não",
+        "paycheck": "Não",
+        "phoneRecharge": "Não"
+      }
+    }
+  ]
+}

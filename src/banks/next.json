@@ -1,0 +1,51 @@
+{
+  "title": "Next",
+  "intro": "Após dois anos de investimentos e pesquisas, em junho de 2017, foi lançado o banco Next, primeiro banco 100% digital do Bradesco e dedicado ao público jovem. Composto por um time multidisciplinar de antropólogos, cientistas sociais e matemáticos, o Next oferece diversos serviços bancários sem que o cliente precise ir a uma agência.",
+  "reputation" : "A solidez do Next é indiscutível por ser do Bradesco, uma das maiores instituições financeiras do Brasil, o banco possui mais de 74 anos de existência, sendo considerado um dos bancos mais lucrativos dos últimos anos.",
+  "website": "https://next.me/",
+  "accounts": [
+    {
+      "title": "Light",
+      "features": {
+        "creditCard": "Sim",
+        "monthlyPayment": "R$0,00",
+        "transfer": "R$10,00 depois do primeiro",
+        "withdraw" : "Sim",
+        "credit": "Sim",
+        "rewards" : "Não",
+        "barcodePayments": "Sim",
+        "paycheck": "Sim",
+        "phoneRecharge": "Sim"
+      }
+    },
+    {
+      "title": "Next",
+      "features": {
+        "creditCard": "Sim",
+        "monthlyPayment": "R$9,95",
+        "transfer": "R$0,00",
+        "withdraw" : "Sim",
+        "credit": "Sim",
+        "rewards" : "Não",
+        "barcodePayments": "Sim",
+        "paycheck": "Sim",
+        "phoneRecharge": "Sim"
+      }
+    },
+        {
+      "title": "Turbinado",
+      "features": {
+        "creditCard": "Sim",
+        "monthlyPayment": "R$29,95",
+        "transfer": "R$0,00",
+        "withdraw" : "Sim",
+        "credit": "Sim",
+        "rewards" : "Livelo",
+        "barcodePayments": "Sim",
+        "paycheck": "Sim",
+        "phoneRecharge": "Sim"
+      }
+    }
+  ]
+}
+

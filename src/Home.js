@@ -7,14 +7,10 @@ import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
 import ResultTable from './ResultTable.js';
 import BankForm from './BankForm.js';
+
 import './App.css';
 
 const styles = theme => ({
-  appBar: {
-    position: 'relative',
-    backgroundColor: theme.palette.background.paper,
-  },
-
   layout: {
     width: 'auto',
     marginLeft: theme.spacing.unit * 2,
@@ -44,22 +40,10 @@ const styles = theme => ({
     margin: '0 auto',
     padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
   },
-  heroButtons: {
-    marginTop: theme.spacing.unit * 4,
-  },
-  buttons: {
-    marginTop:theme.spacing.unit * 3,
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  button: {
-    marginTop: theme.spacing.unit * 3,
-    marginLeft: theme.spacing.unit,
-  },
 });
 
 
-class App extends Component {
+class Home extends Component {
 
   state = {
     loadingResult: false,
@@ -84,7 +68,11 @@ class App extends Component {
 
     if (showTable) {
       return (
-        <ResultTable />
+        <ResultTable
+          clickOnBank={bank => {
+            window.open("/" + bank);
+          }}
+        />
       );
     }
 
@@ -107,19 +95,11 @@ class App extends Component {
 
     return (
       <Fragment>
-        <CssBaseline />
-        <AppBar position="static" color="default" className={classes.appBar}>
-          <Toolbar>
-            <Typography variant="h6" color="inherit" noWrap>
-              MelhorBanco.Digital
-            </Typography>
-          </Toolbar>
-        </AppBar>
         {/* Hero unit */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              Qual banco banco digital?
+              Qual é o melhor banco digital pra você?
             </Typography>
             <Typography variant="h6" align="center" color="textSecondary" paragraph>
               É só informar o que precisa que será calculado as melhores opções de conta dos bancos digitais mais conhecidos:
@@ -137,5 +117,6 @@ class App extends Component {
   }
 }
 
-export default withStyles(styles)(App);
+export default withStyles(styles)(Home);
+
 
