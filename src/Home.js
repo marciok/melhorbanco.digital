@@ -109,7 +109,7 @@ class Home extends Component {
       this.rank = rank;
       this.setState({showTable: true});
     })
-    .catch(error => this.setState({feedback: true}))
+    .catch(error =>  console.warn(error) /*this.setState({feedback: true})*/)
     .finally(() => this.setState({loadingResult: false}))
   }
 

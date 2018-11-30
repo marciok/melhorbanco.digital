@@ -1,0 +1,44 @@
+{
+  "title": "Neon",
+  "intro": "Neon é uma fintech brasileira especializada em abertura e movimentação de contas-correntes digitais e emissão de cartões de débito, crédito e pré-pago em parceria com o Banco Votorantim.",
+  "reclameAqui": "Urk8S78EqfrlPEkn",
+  "reclameAquiURL": "https://www.reclameaqui.com.br/empresa/banco-neon/",
+  "reputationGrade" : "6.0",
+  "reputation" : [
+    "A Neon foi fundada no dia 11 de julho de 2016, por meio de uma joint venture entre a startup de cartões pré-pagos Controly e o Banco Pottencial. Após o estabelecimento da parceria comercial, o Banco Pottencial passou a se chamar 'Banco Neon S.A' e a startup Controly passou a denominar-se 'Neon Pagamentos S.A'",
+    "No dia 04 de maio de 2018, o Banco Neon S.A, banco liquidante dos serviços bancários oferecidos pela Neon e parte da joint venture, é liquidado pelo Banco Central do Brasil, criando instabilidades na plataforma da empresa. No dia 07 de maio do mesmo ano, a Neon anunciou uma nova parceria com o Banco Votorantim, que passou a deter a custódia de todas as contas e serviços oferecidos pela Neon, restabelecendo a normalidade operacional da plataforma bancária da fintech 2 dias depois."
+  ],
+  "website": "https://www.neonpagamentos.com.br",
+  "accounts": [
+    {
+      "title": "Neon",
+      "features": {
+        "creditCard": "Sim",
+        "monthlyPayment": "R$0,00",
+        "transfer": "1 grátis por mês depois R$3,50",
+        "withdraw" : "R$6,90",
+        "credit": "Não",
+        "rewards" : "Não",
+        "barcodePayments": "Sim",
+        "paycheck": "Não",
+        "phoneRecharge": "Sim"
+      }
+    },
+    {
+      "title": "Neon+",
+      "features": {
+        "creditCard": "Sim",
+        "monthlyPayment": "R$0,00",
+        "transfer": "Grátis, mas nescessita ter usado o cartão 10 vezes",
+        "withdraw" : "R$6,90",
+        "credit": "Não",
+        "rewards" : "Não",
+        "barcodePayments": "Sim",
+        "paycheck": "Não",
+        "phoneRecharge": "Sim"
+      }
+    }
+  ]
+}
+
+

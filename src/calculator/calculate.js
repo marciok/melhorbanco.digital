@@ -1,5 +1,7 @@
+import neon from '../banks/neon.json';
 import nubank from '../banks/nubank.json';
 import next from '../banks/next.json';
+import inter from '../banks/inter.json';
 
 const nuconta = {
   bank: 'nubank',
@@ -79,7 +81,7 @@ const neonPlus = {
   phoneCharge: true, 
 }
 
-const inter = {
+const interAccount = {
   bank: 'inter',
   name: 'inter',
   noMonthlyFee: true,
@@ -92,15 +94,23 @@ const inter = {
 }
 
 const fetchGradeForBank = async (bank) => {
-  const bankId = (() => {
-    switch (bank) {
-      case 'nubank': return nubank.reclameAquiId;
-      case 'inter': return '12949';
-      case 'next': return next.reclameAquiId;
-      case 'neon': return 'Urk8S78EqfrlPEkn';
-      default: throw new Error(`Unknown bank: ${bank}`);
-    }
-  })();
+  let bankId;
+  switch (bank) {
+    case 'neon': 
+      bankId = neon.reclameAqui;
+      break;
+    case 'nubank':
+      bankId = nubank.reclameAqui;
+      break
+    case 'inter':
+      bankId = inter.reclameAqui;
+      break;
+    case 'next':
+      bankId = next.reclameAqui;
+      break;
+
+    default: throw new Error(`Unknown bank: ${bank}`);
+  }
 
   const data = await fetch(`https://iosearch.reclameaqui.com.br/raichu-io-site-search-v1/query/companyComplains/10/0?company=${bankId}`,{"mode":"cors"})
   const result = await data.json();
@@ -138,7 +148,7 @@ const calculateServicesCosts = (account, service, numberOfService) => {
 
 const calculateBankRank = async (userOptions) => {
 
-  const accounts = [nuconta, nextLight, nextNext, nextTurbinado, neonAccount, neonPlus, inter];
+  const accounts = [nuconta, nextLight, nextNext, nextTurbinado, neonAccount, neonPlus, interAccount];
   const requirementsPoints = accounts.map(account => {
     return Object.keys(userOptions).filter(option => userOptions[option] === true && account[option] !== undefined).length
   })
@@ -160,12 +170,22 @@ const calculateBankRank = async (userOptions) => {
 
   const banks = Array.from(new Set(accounts.map(account => account.bank)));
 
-  const reputationGrades = [8, 9, 9, 9, 8, 8, 5];
-
   const supportGrades = {} 
   for (var j = 0; j < banks.length; j++) {
     supportGrades[banks[j]] = await fetchGradeForBank(banks[j]);
   }
+
+  const reputationGrades = accounts.map(account => {
+    switch (account.bank) {
+      case 'nubank': return nubank.reputationGrade;
+      case 'next': return next.reputationGrade;
+      case 'neon': return neon.reputationGrade;
+      case 'inter': return inter.reputationGrade;
+      default: throw new Error('Unknown bank');
+    }
+  }); 
+  console.log(reputationGrades)
+
 
   const finalGrades = [];
 
@@ -173,8 +193,8 @@ const calculateBankRank = async (userOptions) => {
     const MAX_REQ_POINTS = 6;
 
     const requirements = ((10 * requirementsPoints[i]) / MAX_REQ_POINTS) * 4; 
-    const reputation =  reputationGrades[i] * 3;
-    const support =  supportGrades[accounts[i].bank] * 3;
+    const reputation = reputationGrades[i] * 3;
+    const support = supportGrades[accounts[i].bank] * 3;
     const grade = (requirements + reputation + support) / 10;
     const monthlyPayment = accounts[i].monthlyPayment;
 
@@ -188,8 +208,6 @@ const calculateBankRank = async (userOptions) => {
       withdrawCosts: withdrawCosts[i]
     });
   }
-
-  console.log(requirementsPoints)
 
   return Promise.resolve(finalGrades.sort((grade1, grade2) => grade1.grade - grade2.grade));
 }

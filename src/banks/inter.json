@@ -1,0 +1,31 @@
+{
+  "title": "Inter",
+  "intro": "Banco Inter é um conglomerado financeiro brasileiro sediado na cidade de Belo Horizonte. A instituição atua no mercado de ativos com operações de conta corrente, capital de giro (Middle Market), crédito imobiliário, financiamentos, cartões de crédito, câmbio, consórcios, seguros e crédito consignado",
+  "reclameAqui": "12949",
+  "reclameAquiURL": "https://www.reclameaqui.com.br/empresa/banco-intermedium/",
+  "reputationGrade" : "5.0",
+  "reputation" : [
+    "No final de 2014, o Banco Inter lançou a Conta Digital, uma conta corrente gratuita, que pode ser acessada por computadores e celulares, que permite depósitos, transferências, pagamento de boletos, saques em qualquer caixa Banco 24 Horas, entre outros serviços. Em abril de 2016, assim que a resolução nº 4.480 do Banco Central do Brasil passou a vigorar, a abertura de novas contas digitais foi facilitada.",
+    "Em maio de 2018, o banco sofreu uma invasão, que resultou no vazamento de dados dos correntistas. Houve também vazamento e posterior revogação da chave de criptografia usada pelo banco para proteger a comunicação entre o banco e os correntistas. Em 31 de Julho de 2018, a Comissão de Proteção dos Dados Pessoais do Ministério Público do DF e Territórios iniciou um processo judicial contra o Banco Inter por danos morais coletivos. O ministério revelou que as investigações constataram que os vazamento de dados afetou 19.961 usuários do banco"
+  ],
+  "website": "https://www.bancointer.com.br",
+  "accounts": [
+    {
+      "title": "Inter",
+      "features": {
+        "creditCard": "Sim",
+        "monthlyPayment": "R$0,00",
+        "transfer": "R$0,00",
+        "withdraw" : "R$0,00",
+        "credit": "Sim",
+        "rewards" : "Não",
+        "barcodePayments": "Sim",
+        "paycheck": "Não",
+        "phoneRecharge": "Sim"
+      }
+    }
+  ]
+}
+
+
+

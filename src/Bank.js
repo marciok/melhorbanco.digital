@@ -30,6 +30,12 @@ import nubank from './banks/nubank.json';
 import nextLogo from './avatar/next.jpg';
 import next from './banks/next.json';
 
+import neonLogo from './avatar/neon.jpg';
+import neon from './banks/neon.json';
+
+import interLogo from './avatar/inter.jpg';
+import inter from './banks/inter.json';
+
 import Disqus from 'disqus-react';
 
 import './App.css';
@@ -138,15 +144,17 @@ class Bank extends Component {
           this.logo = nextLogo;
           return next;
         case 'neon':
-          return {
-            title: 'Next',
-          }
+          this.logo = neonLogo;
+          return neon;
+        case 'inter':
+          this.logo = interLogo;
+          return inter;
         default: break;
       };
     })();
 
-    this.fetchReclameAqui(this.bank.reclameAquiId);
-    this.fetchGradeForBank(this.bank.reclameAquiId);
+    this.fetchReclameAqui(this.bank.reclameAqui);
+    this.fetchGradeForBank(this.bank.reclameAqui);
   }
 
   renderAccounts = accounts => {
