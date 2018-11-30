@@ -8,7 +8,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import nextAvatar from './avatar/next.jpg';
@@ -24,31 +27,28 @@ const styles = theme => ({
     overflowX: 'auto',
   },
   table: {
-    minWidth: 500,
+    minWidth: 510,
   },
   tableCaption: {
     padding: theme.spacing.unit * 3,
-  }
+  },
+
+  cell: {
+    paddingRight:10,
+    paddingLeft:10,
+  },
+
+  extraCosts: {
+    padding: 0,
+    minWidth: 0,
+    minHeight: 0,
+  },
 });
 
-let id = 0;
-function createData(name, avatar, monthlyPay, points, link) {
-  id += 1;
-  return { id, name, avatar, monthlyPay, points, link};
-}
-
-const rows = [
-  createData('Nubank nuconta', nubankAvatar, "R$ 10,00", '79.9%', 'nubank'),
-  createData('Next light', nextAvatar, "R$ 10,00", '79.9%', 'next'),
-  // createData('Next next', nextAvatar, 262, 16.0, 24, 6.0),
-  // createData('Next turbinado', nextAvatar, 305, 3.7, 67, 4.3),
-  createData('Neon', neonAvatar, "R$ 10,00", '79.9%', 'neon'),
-  // createData('Neon+', neonAvatar, 356, 16.0, 49, 3.9),
-  createData('Inter', interAvatar, "R$ 10,00", '79.9%', 'inter'),
-];
 
 function ResultTable(props) {
-  const { classes } = props;
+  const { classes, rank } = props;
+  const rows = rank.reduce((a, b) => [b].concat(a));
 
   return (
     <Paper className={classes.root}>
@@ -56,24 +56,77 @@ function ResultTable(props) {
         <TableHead>
           <TableRow>
             <TableCell>Conta</TableCell>
-            <TableCell numeric>Mensalidade</TableCell>
-            <TableCell numeric>Pontos</TableCell>
+            <TableCell className={classes.cell} numeric>Mensalidade</TableCell>
+            <TableCell className={classes.cell} numeric>TED</TableCell>
+            <TableCell className={classes.cell} numeric>Saque</TableCell>
+            <TableCell className={classes.cell} numeric>Pontuação pelo perfil</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map(row => {
+            const avatar = (() =>{
+              switch (row.bank) {
+                case 'nubank': return nubankAvatar;
+                case 'neon': return neonAvatar;
+                case 'next': return nextAvatar;
+                case 'inter': return interAvatar;
+              }
+            })();
+
+            const extraFeeText = (() =>{
+              switch (row.name) {
+                case 'nuconta': return "Custo do programa de pontos";
+                case 'neon+': return "Tem que fazer 10 compras por mês para se tornar +";
+              }
+            })();
+
+            const extraFees = row.extrasFees.length > 0 ? row.extrasFees.reduce((a, b) => a + b) : 0;
+            const totalCost = extraFees + row.monthlyFee;
+
+            const transfersCosts = !isNaN(row.transferCosts) ? 'R$' + row.transferCosts.toFixed(2) : 'indisp.';
+            const withdrawCosts = !isNaN(row.withdrawCosts) ? 'R$' + row.withdrawCosts.toFixed(2) : 'indisp.';
+
+            const transfersCostsComponent = row.transferCosts.toFixed(2) > 0 ? (
+              <Tooltip title={`Custo da TED x Quantidade Informada`} placement="left">
+                <Button color="secondary" className={classes.extraCosts}>{transfersCosts}</Button>
+              </Tooltip>
+            ) : (transfersCosts);
+
+             const withdrawCostsComponent = row.withdrawCosts.toFixed(2) > 0 ? (
+              <Tooltip title={`Saque x Quantidade Informada`} placement="left">
+                <Button color="secondary" className={classes.extraCosts}>{withdrawCosts}</Button>
+              </Tooltip>
+            ) : (withdrawCosts);
+
+            const extraFeesInfo = () => {
+              if (extraFees > 0) {
+                return(
+                  <Tooltip title={extraFeeText} placement="left">
+                    <Button color="secondary" className={classes.extraCosts}>+ R${extraFees} </Button>
+                  </Tooltip>
+                ); 
+              }
+
+              return null;
+            }
+
             return (
-              <TableRow key={row.id}>
+              <TableRow key={row.bank + row.name}>
                 <TableCell component="th" scope="row">
                   <Chip 
                     label={row.name}
-                    avatar={<Avatar src={row.avatar}/>}
+                    avatar={<Avatar src={avatar}/>}
                     variant="outlined" 
-                    onClick={() => props.clickOnBank(row.link)}
+                    onClick={() => props.clickOnBank(row.bank)}
                   />
                 </TableCell>
-                <TableCell numeric>{row.monthlyPay}</TableCell>
-                <TableCell numeric>{row.points}</TableCell>
+                <TableCell className={classes.cell} numeric>
+                  R${row.monthlyFee}<br />
+                  {extraFeesInfo()}
+                </TableCell>
+                <TableCell className={classes.cell} numeric>{transfersCostsComponent}</TableCell>
+                <TableCell className={classes.cell} numeric>{withdrawCostsComponent}</TableCell>
+                <TableCell className={classes.cell} numeric>{row.grade.toFixed(2)}</TableCell>
               </TableRow>
             );
           })}
@@ -84,6 +137,15 @@ function ResultTable(props) {
            Pontos calculados de acordo com a formula: Requisitos x 10 + Reputação + Atendimento.
            Mensalidade calculada em relação a número de TEDs e saques informados no formulário. 
         </Typography>
+        <Grid container alignContent="center" alignItems="center" justify="center">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => props.onBack()}
+          >
+            Voltar
+          </Button>
+        </Grid>
       </div>
     </Paper>
   );

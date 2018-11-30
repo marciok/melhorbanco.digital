@@ -1,12 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -17,6 +13,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
+import CircularProgress from '@material-ui/core/CircularProgress';
+       
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -95,19 +93,38 @@ const styles = theme => ({
     width: 120,
     height: 120,
   },
+  cell: {
+    paddingRight:10,
+    paddingLeft:10,
+  },
 });
 
 
 class Bank extends Component {
 
-  state = { };
+  state = {
+    loadingComplains: true,
+    complainsGrade: 'Carregando...',
+  };
 
-  // fetchReclameAqui = () => {
-  //   fetch("https://iosearch.reclameaqui.com.br/raichu-io-site-search-v1/complains?index=0&offset=4&order=created&orderType=desc&fields=title,solved,status,evaluated,interactions,userName,userCity,created,id,company,userState,description&deleted=bool:false&company=88850", {"credentials":"omit","headers":{"accept":"application/json, text/plain, */*","accept-language":"en-US,en;q=0.9,pt;q=0.8,pt-BR;q=0.7"},"referrer":"https://www.reclameaqui.com.br/empresa/nubank/","referrerPolicy":"no-referrer-when-downgrade","body":null,"method":"GET","mode":"cors"})
-  //     .then(data => data.json())
-  //     .then(result => console.log(result))
-  //     .catch(error => console.error(error));
-  // }
+  fetchReclameAqui = id => {
+    fetch(
+      `https://iosearch.reclameaqui.com.br/raichu-io-site-search-v1/complains?index=0&offset=4&order=created&orderType=desc&fields=title,solved,status,evaluated,interactions,userName,userCity,created,id,company,userState,description&deleted=bool:false&company=${id}`,
+      {"method":"GET","mode":"cors"})
+      .then(data => data.json())
+      .then(result => {
+        this.complains = result.data;
+        this.setState({loadingComplains: false});
+      })
+      .catch(error => console.error(error));
+  }
+
+  fetchGradeForBank = id => {
+    fetch(`https://iosearch.reclameaqui.com.br/raichu-io-site-search-v1/query/companyComplains/10/0?company=${id}`,{"mode":"cors"})
+    .then(data => data.json())
+    .then(result => this.setState({complainsGrade: result.complainResult.complains.companies[0].index.finalScore}))
+    .catch(error => console.error(error));
+  }
 
   componentWillMount(){
     this.bank = (() => {
@@ -129,25 +146,28 @@ class Bank extends Component {
       };
     })();
 
+    this.fetchReclameAqui(this.bank.reclameAquiId);
+    this.fetchGradeForBank(this.bank.reclameAquiId);
   }
 
   renderAccounts = accounts => {
+    const { classes } = this.props;
 
     return(
       <Fragment>
-        <Table className={this.props.classes.table}>
+        <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell>Conta</TableCell>
-              <TableCell>Mensalidade</TableCell>
-              <TableCell>Cartão de crédito?</TableCell>
-              <TableCell>Programa de pontos?</TableCell>
-              <TableCell>TEDs</TableCell>
-              <TableCell>Saque em caixa eletronico?</TableCell>
-              <TableCell>Cheque?</TableCell>
-              <TableCell>Oferece crédito?</TableCell>
-              <TableCell>Pagar boletos?</TableCell>
-              <TableCell>Recarga Celular?</TableCell>
+              <TableCell className={classes.cell}>Conta</TableCell>
+              <TableCell className={classes.cell}>Mensalidade</TableCell>
+              <TableCell className={classes.cell}>Cartão de crédito?</TableCell>
+              <TableCell className={classes.cell}>Programa de pontos?</TableCell>
+              <TableCell className={classes.cell}>TEDs</TableCell>
+              <TableCell className={classes.cell}>Saque em caixa eletronico?</TableCell>
+              <TableCell className={classes.cell}>Cheque?</TableCell>
+              <TableCell className={classes.cell}>Oferece crédito?</TableCell>
+              <TableCell className={classes.cell}>Pagar boletos?</TableCell>
+              <TableCell className={classes.cell}>Recarga Celular?</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -160,15 +180,15 @@ class Bank extends Component {
                 <TableCell component="th" scope="row">
                   {title}
                 </TableCell>
-                <TableCell>{monthlyPayment}</TableCell>
-                <TableCell>{creditCard}</TableCell>
-                <TableCell>{rewards}</TableCell>
-                <TableCell>{transfer}</TableCell>
-                <TableCell>{withdraw}</TableCell>
-                <TableCell>{paycheck}</TableCell>
-                <TableCell>{credit}</TableCell>
-                <TableCell>{barcodePayments}</TableCell>
-                <TableCell>{phoneRecharge}</TableCell>
+                <TableCell className={classes.cell}>{monthlyPayment}</TableCell>
+                <TableCell className={classes.cell}>{creditCard}</TableCell>
+                <TableCell className={classes.cell}>{rewards}</TableCell>
+                <TableCell className={classes.cell}>{transfer}</TableCell>
+                <TableCell className={classes.cell}>{withdraw}</TableCell>
+                <TableCell className={classes.cell}>{paycheck}</TableCell>
+                <TableCell className={classes.cell}>{credit}</TableCell>
+                <TableCell className={classes.cell}>{barcodePayments}</TableCell>
+                <TableCell className={classes.cell}>{phoneRecharge}</TableCell>
               </TableRow>
             );
           })}
@@ -176,6 +196,44 @@ class Bank extends Component {
         </Table>
       </Fragment>
     );
+  }
+
+  renderComplains = () => {
+    if (!this.complains) {
+      return <CircularProgress variant="indeterminate" />
+    }
+
+    return this.complains.map(complain => {
+
+      return (
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar alt="ReclameAqui" src={reclameAquiAvatar} />
+          </ListItemAvatar>
+          <ListItemText
+            primary={complain.title}
+            secondary={
+              <Fragment>
+                <Typography component="span" className={this.props.classes.inline} color="textPrimary">
+                  {`${complain.userCity}`}
+                </Typography>
+                {` — ${complain.description.substring(0,85)}…`}
+              </Fragment>
+            }
+          />
+        </ListItem>
+      );
+    })
+  }
+
+  renderReputation = () => {
+    return this.bank.reputation.map(reputation => {
+      return (
+        <Typography variant="body1" color="textPrimary" paragraph>
+          {reputation}
+        </Typography>
+      );
+    })
   }
 
   render() {
@@ -203,11 +261,6 @@ class Bank extends Component {
                     Site Oficial
                   </Button>
                 </Grid>
-                <Grid item>
-                  <Button variant="outlined" color="primary">
-                    Feedback
-                  </Button>
-                </Grid>
               </Grid>
             </div>
           </div>
@@ -223,15 +276,13 @@ class Bank extends Component {
                       <path d="M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-12v7h3v-7h-3zm-4.5-9L2 6v2h19V6l-9.5-5z" />
                     </SvgIcon>
                   </IconButton>
-                  Reputação
+                  Solidez
                 </Typography>
-                <Typography variant="body1" color="textPrimary" paragraph>
-                  {this.bank.reputation}
-                </Typography>
+                {this.renderReputation()}
                 </CardContent>
                 <CardActions>
                   <Button color="primary" variant="outlined" className={classes.button}>
-                    Nota 8
+                    Nota {this.bank.reputationGrade}
                   </Button>
                 </CardActions>
               </Card>
@@ -245,45 +296,35 @@ class Bank extends Component {
                         <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z" />
                       </SvgIcon>
                     </IconButton>
-                    Reclamações
+                    Reputação
                   </Typography>
                   <List>
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar alt="Remy Sharp" src={reclameAquiAvatar} />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="Conta existente sem minha concepção"
-                        secondary={
-                          <Fragment>
-                            <Typography component="span" className={classes.inline} color="textPrimary">
-                              Rio de Janeirto - 23/09/18
-                            </Typography>
-                            {" — Olá, muito bom dia, meu problema começou quando minha conta do PagSeguro foi invadida…"}
-                          </Fragment>
-                        }
-                      />
-                    </ListItem>
+                    {this.renderComplains()}
                   </List>
                 </CardContent>
                 <CardActions>
-                  <Button color="primary" variant="outlined" className={classes.button}>
-                    Nota 7.8
+                  <Button 
+                    color="primary"
+                    variant="outlined"
+                    className={classes.button}
+                    onClick={() => window.open(this.bank.reclameAquiURL)}
+                  >
+                    Nota {this.state.complainsGrade}
                   </Button>  
                 </CardActions>
               </Card>
             </Grid>
           </Grid>
           <Card className={classes.card} style={{marginTop: '30px'}}>
+            <Typography variant="title" align="left" color="textPrimary" paragraph>
+              <IconButton>
+                <SvgIcon>
+                  <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
+                </SvgIcon>
+              </IconButton>
+              Contas
+            </Typography>
             <CardContent className={classes.tableContent}>
-              <Typography variant="title" align="left" color="textPrimary" paragraph>
-                <IconButton>
-                  <SvgIcon>
-                    <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
-                  </SvgIcon>
-                </IconButton>
-                Contas
-              </Typography>
               {this.renderAccounts(accounts)}
             </CardContent>
           </Card>

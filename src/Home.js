@@ -7,6 +7,13 @@ import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
 import ResultTable from './ResultTable.js';
 import BankForm from './BankForm.js';
+import Snackbar from '@material-ui/core/Snackbar';
+import ErrorIcon from '@material-ui/icons/Error';
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
+import classNames from 'classnames';
+import calculateBankRank from './calculator/calculate';
+
 
 import './App.css';
 
@@ -40,6 +47,17 @@ const styles = theme => ({
     margin: '0 auto',
     padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
   },
+  icon: {
+    fontSize: 20,
+  },
+  iconVariant: {
+    opacity: 0.9,
+    marginRight: theme.spacing.unit,
+  },
+  message: {
+    display: 'flex',
+    alignItems: 'center',
+  },
 });
 
 
@@ -48,6 +66,15 @@ class Home extends Component {
   state = {
     loadingResult: false,
     showTable: false,
+    feedback: false,
+    creditCard: false,
+    rewards: false,
+    noMonthlyFee: false,
+    payBarcode: false,
+    phoneCharge: false,
+    credit: false,
+    transfers: 0,
+    withdraws: 0,
   };
 
   handleTEDChange = (event, value) => {
@@ -60,7 +87,33 @@ class Home extends Component {
 
   loadResult = () => {
     this.setState({loadingResult: true});
-    this.setState({showTable: true});
+    const  {
+      credit,
+      noMonthlyFee,
+      creditCard, 
+      rewards, 
+      payBarcode,
+      transfers,
+      withdraws,
+      phoneCharge,
+    } = this.state;
+
+    calculateBankRank({
+      credit,
+      noMonthlyFee,
+      creditCard, 
+      rewards, 
+      payBarcode,
+      phoneCharge,
+      transfers,
+      withdraws,
+    })
+    .then(rank => {
+      this.rank = rank;
+      this.setState({showTable: true});
+    })
+    .catch(error => this.setState({feedback: true}))
+    .finally(() => this.setState({loadingResult: false}))
   }
 
   renderPaperContent = () => {
@@ -68,24 +121,54 @@ class Home extends Component {
 
     if (showTable) {
       return (
-        <ResultTable
-          clickOnBank={bank => {
-            window.open("/" + bank);
-          }}
-        />
+        <Fragment>
+          <Typography variant="h6" gutterBottom>
+            Ranque das melhores opções e custos mensais
+          </Typography>
+          <ResultTable
+            rank={this.rank}
+            clickOnBank={bank => window.open("/" + bank)}
+            onBack={() => this.setState({showTable: false})}
+          />
+        </Fragment>
       );
     }
 
     return(
       <BankForm 
+        features={this.state}
+        onChangeFeature={(featureChanged, value) => this.setState({[featureChanged]: value})}
         loading={loadingResult}
-        onTransferChange={value => {
-          // console.log(value)
-        }}
-        onWithdrawChange={value => {
-          // console.log(value)
-        }}
         onSubmitForm={this.loadResult}
+      />
+    );
+  }
+
+  feedbackMessage = () => {
+    const { classes } = this.props;
+
+    return(
+      <Snackbar
+         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+         aria-describedby="client-snackbar"
+         open={this.state.feedback}
+         message={
+            <span id="client-snackbar" className={classes.message}>
+              <ErrorIcon className={classNames(classes.icon, classes.iconVariant)} />
+              Opss.. Não foi possível concluir seu pedido
+            </span>
+          }
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              className={classes.close}
+              onClick={() => this.setState({feedback: false})}
+            >
+              <CloseIcon className={classes.icon} />
+            </IconButton>
+          ]}
       />
     );
   }
@@ -112,6 +195,7 @@ class Home extends Component {
             {this.renderPaperContent()}
           </Paper>
         </main>
+        {this.feedbackMessage()}
       </Fragment>
     );
   }
