@@ -15,7 +15,6 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
-       
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -30,6 +29,8 @@ import nubank from './banks/nubank.json';
 
 import nextLogo from './avatar/next.jpg';
 import next from './banks/next.json';
+
+import Disqus from 'disqus-react';
 
 import './App.css';
 
@@ -127,23 +128,6 @@ class Bank extends Component {
     .catch(error => console.error(error));
   }
 
-
-  loadComments = () => {
-    /**
-*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-
-    var disqus_config = function () {
-      this.page.url = `http://melhorbanco.digital/${this.bank.name}`;  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = this.bank.name; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-
-    var d = document, s = d.createElement('script');
-    s.src = 'https://melhorbanco-digital.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-  }
-
   componentWillMount(){
     this.bank = (() => {
       switch (this.props.name) {
@@ -153,20 +137,16 @@ class Bank extends Component {
         case 'next':
           this.logo = nextLogo;
           return next;
-          break;
         case 'neon':
           return {
             title: 'Next',
           }
-          break;
-        default:
-          return {}
+        default: break;
       };
     })();
 
     this.fetchReclameAqui(this.bank.reclameAquiId);
     this.fetchGradeForBank(this.bank.reclameAquiId);
-    this.loadComments();
   }
 
   renderAccounts = accounts => {
@@ -219,6 +199,15 @@ class Bank extends Component {
     );
   }
 
+  renderComments = () => {
+    const disqusConfig = {
+      url: `http://melhorbanco.digital/${this.bank.name}`,
+      identifier: this.bank.name,
+    };
+
+    return <Disqus.DiscussionEmbed shortname={"melhorbanco-digital"} config={disqusConfig} />
+  }
+
   renderComplains = () => {
     if (!this.complains) {
       return <CircularProgress variant="indeterminate" />
@@ -253,7 +242,7 @@ class Bank extends Component {
     let id = 0;
     return this.bank.reputation.map(reputation => {
       id += 1;
-        console.log(id)
+
       return (
         <Typography key={id} variant="body1" color="textPrimary" paragraph>
           {reputation}
@@ -264,7 +253,7 @@ class Bank extends Component {
 
   render() {
     const { classes } = this.props;
-    const { title, intro, reputation, accounts, website } = this.bank;
+    const { title, intro, accounts, website } = this.bank;
 
     return (
       <Fragment>
@@ -366,7 +355,7 @@ class Bank extends Component {
               Comentários
             </Typography>
             <CardContent>
-              <div id="disqus_thread"></div>
+              {this.renderComments()}
             </CardContent>
           </Card>
         </main>
