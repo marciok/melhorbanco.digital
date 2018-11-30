@@ -1,3 +1,5 @@
+import nubank from '../banks/nubank.json';
+import next from '../banks/next.json';
 
 const nuconta = {
   bank: 'nubank',
@@ -50,7 +52,7 @@ const nextTurbinado = {
   phoneCharge: true, 
 }
 
-const neon = {
+const neonAccount = {
   bank: 'neon',
   name: 'neon',
   noMonthlyFee: true,
@@ -92,9 +94,9 @@ const inter = {
 const fetchGradeForBank = async (bank) => {
   const bankId = (() => {
     switch (bank) {
-      case 'nubank': return '88850';
+      case 'nubank': return nubank.reclameAquiId;
       case 'inter': return '12949';
-      case 'next': return '187626';
+      case 'next': return next.reclameAquiId;
       case 'neon': return 'Urk8S78EqfrlPEkn';
       default: throw new Error(`Unknown bank: ${bank}`);
     }
@@ -136,7 +138,7 @@ const calculateServicesCosts = (account, service, numberOfService) => {
 
 const calculateBankRank = async (userOptions) => {
 
-  const accounts = [nuconta, nextLight, nextNext, nextTurbinado, neon, neonPlus, inter];
+  const accounts = [nuconta, nextLight, nextNext, nextTurbinado, neonAccount, neonPlus, inter];
   const requirementsPoints = accounts.map(account => {
     return Object.keys(userOptions).filter(option => userOptions[option] === true && account[option] !== undefined).length
   })
