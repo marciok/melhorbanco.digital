@@ -127,6 +127,23 @@ class Bank extends Component {
     .catch(error => console.error(error));
   }
 
+
+  loadComments = () => {
+    /**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+    var disqus_config = function () {
+      this.page.url = `http://melhorbanco.digital/${this.bank.name}`;  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = this.bank.name; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    var d = document, s = d.createElement('script');
+    s.src = 'https://melhorbanco-digital.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+
   componentWillMount(){
     this.bank = (() => {
       switch (this.props.name) {
@@ -149,10 +166,12 @@ class Bank extends Component {
 
     this.fetchReclameAqui(this.bank.reclameAquiId);
     this.fetchGradeForBank(this.bank.reclameAquiId);
+    this.loadComments();
   }
 
   renderAccounts = accounts => {
     const { classes } = this.props;
+    let id = 0;
 
     return(
       <Fragment>
@@ -175,9 +194,10 @@ class Bank extends Component {
           {accounts.map(account => {
             const { features, title } = account;
             const { creditCard, monthlyPayment, transfer, withdraw, credit, rewards, barcodePayments, paycheck, phoneRecharge } = features;
+            id += 1;
 
             return(
-              <TableRow>
+              <TableRow key={id}>
                 <TableCell component="th" scope="row">
                   {title}
                 </TableCell>
@@ -204,10 +224,12 @@ class Bank extends Component {
       return <CircularProgress variant="indeterminate" />
     }
 
+    let id = 0;
     return this.complains.map(complain => {
+      id += 1;
 
       return (
-        <ListItem>
+        <ListItem key={id}>
           <ListItemAvatar>
             <Avatar alt="ReclameAqui" src={reclameAquiAvatar} />
           </ListItemAvatar>
@@ -228,9 +250,12 @@ class Bank extends Component {
   }
 
   renderReputation = () => {
+    let id = 0;
     return this.bank.reputation.map(reputation => {
+      id += 1;
+        console.log(id)
       return (
-        <Typography variant="body1" color="textPrimary" paragraph>
+        <Typography key={id} variant="body1" color="textPrimary" paragraph>
           {reputation}
         </Typography>
       );
@@ -329,6 +354,19 @@ class Bank extends Component {
             </Typography>
             <CardContent className={classes.tableContent}>
               {this.renderAccounts(accounts)}
+            </CardContent>
+          </Card>
+          <Card className={classes.card} style={{marginTop: '30px'}}>
+            <Typography variant="title" align="left" color="textPrimary" paragraph>
+              <IconButton>
+                <SvgIcon>
+                  <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" />
+                </SvgIcon>
+              </IconButton>
+              Comentários
+            </Typography>
+            <CardContent>
+              <div id="disqus_thread"></div>
             </CardContent>
           </Card>
         </main>
