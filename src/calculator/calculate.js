@@ -4,7 +4,6 @@ const nuconta = {
   name: 'nuconta',
   noMonthlyFee: true,
   creditCard: true, 
-  transfer:true,
   transfer: { value: 0 },
   rewards: {
     value: 19
@@ -90,16 +89,6 @@ const inter = {
   phoneCharge: true, 
 }
 
-// const userOptions = {
-//   noMonthlyFee: true,
-//   creditCard: true, 
-//   rewards: true, 
-//   payBarcode: true,
-//   numberOfTransfers: 2,
-//   numberOfWithdraws: 4,
-// }
-//
-
 const fetchGradeForBank = async (bank) => {
   const bankId = (() => {
     switch (bank) {
@@ -107,7 +96,7 @@ const fetchGradeForBank = async (bank) => {
       case 'inter': return '12949';
       case 'next': return '187626';
       case 'neon': return 'Urk8S78EqfrlPEkn';
-      default: throw `Unknown bank: ${bank}`;
+      default: throw new Error(`Unknown bank: ${bank}`);
     }
   })();
 
@@ -141,7 +130,7 @@ const calculateServicesCosts = (account, service, numberOfService) => {
     }
   }
 
-  throw `Could not parse account: ${account} on service: ${service}`
+  throw new Error(`Could not parse account: ${account} on service: ${service}`);
 }
 
 
@@ -155,9 +144,12 @@ const calculateBankRank = async (userOptions) => {
   const extrasFees = accounts.map(account => {
     return Object.keys(userOptions).map(option => {
       const feature = account[option];
+
       if (userOptions[option] !== false && feature !== undefined && feature.value !== undefined) {
         return feature.value;
       }
+
+      return undefined;
     }).filter(n => n)
   })
 

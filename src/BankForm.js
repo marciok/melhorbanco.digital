@@ -41,7 +41,7 @@ class BankForm extends Component {
   render(){
     const loading = this.props.loading;
     const { numberOfTransfers, numberOfWithdraws } = this.state;
-    const { credit, creditCard, rewards, noMonthlyFee, payBarcode, phoneCharge, transfers, withdraws } = this.props.features;
+    const { credit, creditCard, rewards, noMonthlyFee, payBarcode, phoneCharge } = this.props.features;
     
     return(
       <Fragment>

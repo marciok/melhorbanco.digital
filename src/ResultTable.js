@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -70,6 +70,7 @@ function ResultTable(props) {
                 case 'neon': return neonAvatar;
                 case 'next': return nextAvatar;
                 case 'inter': return interAvatar;
+                default: break;
               }
             })();
 
@@ -77,11 +78,11 @@ function ResultTable(props) {
               switch (row.name) {
                 case 'nuconta': return "Custo do programa de pontos";
                 case 'neon+': return "Tem que fazer 10 compras por mês para se tornar +";
+                default: break;
               }
             })();
 
             const extraFees = row.extrasFees.length > 0 ? row.extrasFees.reduce((a, b) => a + b) : 0;
-            const totalCost = extraFees + row.monthlyFee;
 
             const transfersCosts = !isNaN(row.transferCosts) ? 'R$' + row.transferCosts.toFixed(2) : 'indisp.';
             const withdrawCosts = !isNaN(row.withdrawCosts) ? 'R$' + row.withdrawCosts.toFixed(2) : 'indisp.';
