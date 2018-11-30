@@ -5,11 +5,18 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import ResultTable from './ResultTable.js';
 import BankForm from './BankForm.js';
 import Snackbar from '@material-ui/core/Snackbar';
+import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import classNames from 'classnames';
 import calculateBankRank from './calculator/calculate';
+
+import nubankLogo from './avatar/nubank.jpg';
+import nextLogo from './avatar/next.jpg';
+import neonLogo from './avatar/neon.jpg';
+import interLogo from './avatar/inter.jpg';
 
 
 import './App.css';
@@ -54,6 +61,11 @@ const styles = theme => ({
   message: {
     display: 'flex',
     alignItems: 'center',
+  },
+  bigAvatar: {
+    margin: 10,
+    width: 80,
+    height: 80,
   },
 });
 
@@ -182,9 +194,15 @@ class Home extends Component {
               Qual é o melhor banco digital pra você?
             </Typography>
             <Typography variant="h6" align="center" color="textSecondary" paragraph>
-              É só informar o que precisa que será calculado as melhores opções de conta dos bancos digitais mais conhecidos:
-              Nubank, Next, Inter e Neon. Também levado em consideração a nota de satisfação do ReclameAqui e o que os consumidores estão falando nas mídias socias.
+              É só informar o que precisa para calcular as melhores opções de conta nos bancos digitais mais conhecidos.
+              Também levado em consideração a nota do ReclameAqui e a solidez.
             </Typography>
+            <Grid container justify="center" alignItems="center">
+              <Avatar className={classes.bigAvatar} alt="Nubank" src={nubankLogo} />
+              <Avatar className={classes.bigAvatar} alt="Neon" src={neonLogo} />
+              <Avatar className={classes.bigAvatar} alt="Inter" src={interLogo} />
+              <Avatar className={classes.bigAvatar} alt="Next" src={nextLogo} />
+            </Grid>
           </div>
         </div>
         <main className={classes.layout}>

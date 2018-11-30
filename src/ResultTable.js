@@ -135,8 +135,7 @@ function ResultTable(props) {
       </Table>
       <div className={classes.tableCaption}>
         <Typography variant="caption" align="center" color="textSecondary" paragraph>
-           Pontos calculados de acordo com a formula: Requisitos x 10 + Reputação + Atendimento.
-           Mensalidade calculada em relação a número de TEDs e saques informados no formulário. 
+          Pontos calculados de acordo com a formula: <br /><strong>(Requisitos x 4) + (Solidez x 3) + (Reputação x 3) / 10</strong>.
         </Typography>
         <Grid container alignContent="center" alignItems="center" justify="center">
           <Button
