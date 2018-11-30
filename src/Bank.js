@@ -14,6 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Tooltip from '@material-ui/core/Tooltip';
        
 
 import Table from '@material-ui/core/Table';
@@ -281,9 +282,11 @@ class Bank extends Component {
                 {this.renderReputation()}
                 </CardContent>
                 <CardActions>
-                  <Button color="primary" variant="outlined" className={classes.button}>
-                    Nota {this.bank.reputationGrade}
-                  </Button>
+                  <Tooltip title={"Nota subjetiva utlizando os critérios: tempo de mercado, segurança e últimas notícias."}>
+                    <Button color="primary" variant="outlined" className={classes.button}>
+                      Nota {this.bank.reputationGrade}
+                    </Button>
+                  </Tooltip>
                 </CardActions>
               </Card>
             </Grid>
